@@ -65,8 +65,12 @@ reserved = TokenIdentifier("Reserved", Stuff.states_2 , Stuff.entry_2)
 
 operators = TokenIdentifier("Operator", Stuff.states_3, Stuff.entry_3)
 #print(operators.EvaluateRegularExpression(codigo))
+
+ints = TokenIdentifier("Int", Stuff.states_4, Stuff.entry_4)
+
+floats = TokenIdentifier("Float", Stuff.states_5, Stuff.entry_5)
                     
-identifiers = [identify, reserved, operators]
+identifiers = [identify, reserved, operators, ints, floats]
 codeAnalyzer = LexicalAnalizer(codigo, identifiers)
 codeAnalyzer.AnalyzeCode() 
     
