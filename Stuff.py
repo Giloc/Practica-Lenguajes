@@ -1,12 +1,21 @@
+import string
 class State:
 
     def __init__(self, name, accept):
         self.name = name
         self.accept = accept
-        self.entries = None
+        self.entries = {}
     
     def AssignTransitions(self, entries):
         self.entries = entries
+
+    def FillDict(self, chars, exceptions, state):
+        dic = {}
+        for i in range(len(chars)):
+            if(chars[i] not in exceptions):
+                dic[chars[i]] = state
+        self.entries.update(dic)
+        return dic
 
 #identify words
 state_1 = State("A", False)
@@ -106,3 +115,18 @@ state_d_f.AssignTransitions({"0":state_d_f, "1":state_d_f, "2":state_d_f, "3":st
 
 states_5 = [state_empty_f, state_a_f, state_b_f, state_c_f, state_d_f]
 entry_5 = ["+", "-", ".", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+#string
+state_empty_s = State("Empty", False)
+state_a_s = State("A", False)
+state_b_s = State("B", False)
+state_e_s = State("E", True)
+
+state_empty_s.AssignTransitions({'"':state_a_s, "'":state_b_s})
+state_a_s.AssignTransitions({'"':state_e_s})
+state_a_s.FillDict(string.printable, '"', state_a_s)
+state_b_s.AssignTransitions({"'":state_e_s})
+state_b_s.FillDict(string.printable, "'", state_b_s)
+
+states_6 = [state_empty_s, state_a_s, state_b_s, state_e_s]
+entry_6 = string.printable

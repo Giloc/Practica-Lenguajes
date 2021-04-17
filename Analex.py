@@ -8,7 +8,7 @@ class Token:
     def __init__(self, value, name):
         self.value = value
         self.name = name
-
+        
 class TokenIdentifier:
 
     def __init__(self, tokenType, states, entries):
@@ -46,7 +46,14 @@ class LexicalAnalizer:
 
     def AnalyzeCode(self):
         newCode = self.code.split(" ")
-        for i in range(len(newCode)):
+        i = 0
+        while i < len(newCode):
+            indexControl = i
+            if((newCode[i][0] == '"' and newCode[i][-1] != '"') or (newCode[i][0] == "'" and newCode[i][-1] != "'")):
+                indexControl = self.VerifyString(newCode, i)
+                if indexControl == i:
+                    print("Invalid Expression Here")
+                    return
             hasToken = False
             for j in range(len(self.tokenList)):
                 if self.tokenList[j].EvaluateRegularExpression(newCode[i]):
@@ -54,7 +61,19 @@ class LexicalAnalizer:
                     j = len(self.tokenList)
                     hasToken = True
             if  not hasToken:
-                print("Invalid Expression")    
+                print("Invalid Expression")
+            i = indexControl
+            i += 1
+    
+    def VerifyString(self, code, ind):
+        beginSymbol = code[ind][0]
+        lastIndex = ind
+        for k in range(ind + 1, len(code)):
+            code[ind] = code[ind] + code[k]
+            if code[k][-1] == beginSymbol:
+                lastIndex = k
+                break
+        return lastIndex
     
 
 identify = TokenIdentifier("Identify", Stuff.states, Stuff.entry)
@@ -69,8 +88,10 @@ operators = TokenIdentifier("Operator", Stuff.states_3, Stuff.entry_3)
 ints = TokenIdentifier("Int", Stuff.states_4, Stuff.entry_4)
 
 floats = TokenIdentifier("Float", Stuff.states_5, Stuff.entry_5)
+
+strings = TokenIdentifier("String", Stuff.states_6, Stuff.entry_6)
                     
-identifiers = [identify, reserved, operators, ints, floats]
+identifiers = [identify, reserved, operators, ints, floats, strings]
 codeAnalyzer = LexicalAnalizer(codigo, identifiers)
 codeAnalyzer.AnalyzeCode() 
     
