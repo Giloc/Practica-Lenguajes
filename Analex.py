@@ -1,7 +1,5 @@
-#primero dejamos que el usuario meta su mierda
-codigo = input("Ingrese el código pai: ")
-#tokenList = []
 import Stuff
+codigo = input("Ingrese el código pai: ")
 
 class Token:
 
@@ -40,30 +38,32 @@ class TokenIdentifier:
         return self.currentState.accept
     
 class LexicalAnalizer:
-    def __init__(self, code, tokenList):
+    def __init__(self, code, finiteAutomates):
         self.code = code
-        self.tokenList = tokenList
+        self.finiteAutomates = finiteAutomates
+        self.tokenList = []
 
     def AnalyzeCode(self):
-        newCode = self.code.split(" ")
+        newCode = self.SplitCode(self.code.split(" "))
         i = 0
         while i < len(newCode):
             indexControl = i
             if((newCode[i][0] == '"' and newCode[i][-1] != '"') or (newCode[i][0] == "'" and newCode[i][-1] != "'")):
                 indexControl = self.VerifyString(newCode, i)
                 if indexControl == i:
-                    print("Invalid Expression Here")
+                    print("Invalid Expression")
                     return
             hasToken = False
-            for j in range(len(self.tokenList)):
-                if self.tokenList[j].EvaluateRegularExpression(newCode[i]):
-                    print(self.tokenList[j].tokenType)
-                    j = len(self.tokenList)
+            for j in range(len(self.finiteAutomates)):
+                if self.finiteAutomates[j].EvaluateRegularExpression(newCode[i]):
+                    self.tokenList = self.tokenList + [Token(newCode[i], self.finiteAutomates[j].tokenType)]
                     hasToken = True
+                    break
             if  not hasToken:
-                print("Invalid Expression")
+                self.tokenList[newCode[i]] = "Invalid Expression"
             i = indexControl
             i += 1
+        print(self.tokenList)
     
     def VerifyString(self, code, ind):
         beginSymbol = code[ind][0]
@@ -75,23 +75,53 @@ class LexicalAnalizer:
                 break
         return lastIndex
     
+    def SplitCode(self, code):
+        seps = ["(", ")", "{", "}", ";"]
+        newCode = []
+        hasOp = False
+        open = False
+        i = 0
+        while i < len(code):
+            j = 0
+            while j < len(code[i]):
+                if(code[i][j] != "'" and code[i][j] != '"' and not open):
+                    if(code[i][j] in seps):
+                        hasOp = True
+                        newCode = newCode + [code[i][0:j]] + [code[i][j]] if j != 0 else newCode + [code[i][0]]
+                        code[i] = code[i][j+1:]
+                        j = -1
+                elif((code[i][j] == "'" or code[i][j] == '"') and not open):
+                    open = True
+                elif((code[i][j] == "'" or code[i][j] == '"') and open):
+                    open = False
+                j += 1
+            newCode = newCode + [code[i]] if len(code[i]) > 0 else newCode
+            i += 1
+        return newCode
 
-identify = TokenIdentifier("Identify", Stuff.states, Stuff.entry)
-#print(identify.EvaluateRegularExpression(codigo))
+    def PrintTokensType(self):
+        for i in self.tokenList:
+            print(i.value, ": ", i.name)
+
+
+            
+
+identify = TokenIdentifier("Identify", Stuff.states_1, Stuff.entry_1)
 
 reserved = TokenIdentifier("Reserved", Stuff.states_2 , Stuff.entry_2)
-#print(reserved.EvaluateRegularExpression(codigo))
 
 operators = TokenIdentifier("Operator", Stuff.states_3, Stuff.entry_3)
-#print(operators.EvaluateRegularExpression(codigo))
 
 ints = TokenIdentifier("Int", Stuff.states_4, Stuff.entry_4)
 
 floats = TokenIdentifier("Float", Stuff.states_5, Stuff.entry_5)
 
 strings = TokenIdentifier("String", Stuff.states_6, Stuff.entry_6)
+
+separators = TokenIdentifier("Separator", Stuff.states_7, Stuff.entrry_7)
                     
-identifiers = [identify, reserved, operators, ints, floats, strings]
+identifiers = [reserved, identify, operators, ints, floats, strings, separators]
 codeAnalyzer = LexicalAnalizer(codigo, identifiers)
-codeAnalyzer.AnalyzeCode() 
+codeAnalyzer.AnalyzeCode()
+codeAnalyzer.PrintTokensType()
     

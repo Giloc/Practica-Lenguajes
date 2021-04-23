@@ -9,7 +9,7 @@ class State:
     def AssignTransitions(self, entries):
         self.entries = entries
 
-    def FillDict(self, chars, exceptions, state):
+    def FillDict(self, chars, state, exceptions = ""):
         dic = {}
         for i in range(len(chars)):
             if(chars[i] not in exceptions):
@@ -18,12 +18,22 @@ class State:
         return dic
 
 #identify words
-state_1 = State("A", False)
-state_2 = State("B", True)
-entry = ["a", "b", "c", "_"]
-state_1.AssignTransitions({"a":state_2, "b":state_2, "c":state_2, "_":state_1})
-state_2.AssignTransitions({"a":state_2, "b":state_2, "c":state_2, "_":state_2})
-states = [state_1, state_2]
+state_empty_id = State("empty", False)
+state_a_id = State("A", False)
+state_b_id = State("B", True)
+state_c_id = State("C", False)
+
+state_empty_id.AssignTransitions({"_": state_a_id})
+state_empty_id.FillDict(string.ascii_letters, state_b_id)
+state_a_id.AssignTransitions({})
+state_a_id.FillDict(string.ascii_letters, state_b_id)
+state_b_id.AssignTransitions({"_":state_c_id})
+state_b_id.FillDict(string.ascii_letters + string.digits, state_b_id)
+state_c_id.AssignTransitions({})
+state_c_id.FillDict(string.ascii_letters + string.digits, state_b_id)
+
+states_1 = [state_empty_id, state_a_id, state_b_id, state_c_id]
+entry_1 = string.digits + string.ascii_letters + "_"
 
 #Reserved words
 state_empty_r = State("empty", False)
@@ -124,9 +134,27 @@ state_e_s = State("E", True)
 
 state_empty_s.AssignTransitions({'"':state_a_s, "'":state_b_s})
 state_a_s.AssignTransitions({'"':state_e_s})
-state_a_s.FillDict(string.printable, '"', state_a_s)
+state_a_s.FillDict(string.printable, state_a_s, '"')
 state_b_s.AssignTransitions({"'":state_e_s})
-state_b_s.FillDict(string.printable, "'", state_b_s)
+state_b_s.FillDict(string.printable, state_b_s, "'")
 
 states_6 = [state_empty_s, state_a_s, state_b_s, state_e_s]
 entry_6 = string.printable
+
+#separator
+state_empty_sep = State("Empty", False)
+state_a_sep = State("A", True)
+state_b_sep = State("B", True)
+state_c_sep = State("C", True)
+state_d_sep = State("D", True)
+state_e_sep = State("E", True)
+
+state_empty_sep.AssignTransitions({";":state_a_sep, "(":state_b_sep, ")":state_c_sep, "{":state_d_sep, "}":state_e_sep})
+state_a_sep.AssignTransitions({})
+state_b_sep.AssignTransitions({})
+state_c_sep.AssignTransitions({})
+state_d_sep.AssignTransitions({})
+state_e_sep.AssignTransitions({})
+
+states_7 = [state_empty_sep, state_a_sep, state_b_sep, state_c_sep, state_d_sep, state_e_sep]
+entrry_7 = [";", "(", ")", "{", "}"]
