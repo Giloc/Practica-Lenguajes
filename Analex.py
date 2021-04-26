@@ -1,6 +1,5 @@
 import Stuff
-codigo = input("Ingrese el código pai: ")
-
+#codigo = input()
 class Token:
 
     def __init__(self, value, name):
@@ -36,15 +35,35 @@ class TokenIdentifier:
         if self.currentState is None:
             return False
         return self.currentState.accept
+
+identify = TokenIdentifier("Identify", Stuff.states_1, Stuff.entry_1)
+
+reserved = TokenIdentifier("Reserved", Stuff.states_2 , Stuff.entry_2)
+
+operators = TokenIdentifier("Operator", Stuff.states_3, Stuff.entry_3)
+
+ints = TokenIdentifier("Int", Stuff.states_4, Stuff.entry_4)
+
+floats = TokenIdentifier("Float", Stuff.states_5, Stuff.entry_5)
+
+strings = TokenIdentifier("String", Stuff.states_6, Stuff.entry_6)
+
+separators = TokenIdentifier("Separator", Stuff.states_7, Stuff.entrry_7)
+
+identifiers = [reserved, identify, operators, ints, floats, strings, separators]
     
 class LexicalAnalizer:
-    def __init__(self, code, finiteAutomates):
-        self.code = code
+    def __init__(self, finiteAutomates = identifiers):
         self.finiteAutomates = finiteAutomates
         self.tokenList = []
 
-    def AnalyzeCode(self):
-        newCode = self.SplitCode(self.code.split(" "))
+    def AnalyzeCode(self, code):
+        multiCode = self.SplitCode(code.split("\n"))
+        newCode = " "
+        newCode = newCode.join(multiCode)
+        newCode = newCode.split(" ")
+        noneString = ""
+        newCode = list(filter(lambda val: val != noneString, newCode))
         i = 0
         while i < len(newCode):
             indexControl = i
@@ -60,10 +79,10 @@ class LexicalAnalizer:
                     hasToken = True
                     break
             if  not hasToken:
-                self.tokenList[newCode[i]] = "Invalid Expression"
+                self.tokenList = self.tokenList + [Token(newCode[i], "Invalid Expression")] 
             i = indexControl
             i += 1
-        print(self.tokenList)
+        return self.tokenList
     
     def VerifyString(self, code, ind):
         beginSymbol = code[ind][0]
@@ -99,29 +118,14 @@ class LexicalAnalizer:
             i += 1
         return newCode
 
-    def PrintTokensType(self):
+    def GetTokensValue(self):
+        a=[]
         for i in self.tokenList:
-            print(i.value, ": ", i.name)
+            a = a + [i.value + ": " + i.name]
+        return a
 
-
-            
-
-identify = TokenIdentifier("Identify", Stuff.states_1, Stuff.entry_1)
-
-reserved = TokenIdentifier("Reserved", Stuff.states_2 , Stuff.entry_2)
-
-operators = TokenIdentifier("Operator", Stuff.states_3, Stuff.entry_3)
-
-ints = TokenIdentifier("Int", Stuff.states_4, Stuff.entry_4)
-
-floats = TokenIdentifier("Float", Stuff.states_5, Stuff.entry_5)
-
-strings = TokenIdentifier("String", Stuff.states_6, Stuff.entry_6)
-
-separators = TokenIdentifier("Separator", Stuff.states_7, Stuff.entrry_7)
-                    
-identifiers = [reserved, identify, operators, ints, floats, strings, separators]
-codeAnalyzer = LexicalAnalizer(codigo, identifiers)
-codeAnalyzer.AnalyzeCode()
-codeAnalyzer.PrintTokensType()
+                
+#codeAnalyzer = LexicalAnalizer(identifiers)
+#codeAnalyzer.AnalyzeCode(codigo)
+#codeAnalyzer.PrintTokensType()
     
