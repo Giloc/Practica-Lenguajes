@@ -7,7 +7,7 @@ code_editor_column = [
     ],
 
     [
-        ui.Multiline(size=(50, 50), background_color="black", text_color="white", key="_CODE")
+        ui.Multiline(size=(50, 30), background_color="black", text_color="white", key="_CODE")
     ],
 
     [
@@ -20,7 +20,7 @@ toke_list_column = [
         ui.Text("Lista de tokens")
     ],
     [
-        ui.Listbox(values=[], size=(50, 50), key="_LIST")
+        ui.Listbox(values=[], size=(50, 30), key="_LIST")
     ]
 ]
 

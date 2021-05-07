@@ -62,15 +62,15 @@ state_d_r.AssignTransitions({})
 state_e_r.AssignTransitions({"t":state_d_r})
 state_f_r.AssignTransitions({"i":state_j_r})
 state_g_r.AssignTransitions({"i":state_k_r})
-state_h_r.AssignTransitions({"b":state_l_r})
-state_j_r.AssignTransitions({"l":state_m_r})
-state_k_r.AssignTransitions({"v":state_n_r})
-state_l_r.AssignTransitions({"l":state_o_r})
-state_m_r.AssignTransitions({"e":state_d_r})
-state_n_r.AssignTransitions({"a":state_q_r})
-state_o_r.AssignTransitions({"i":state_r_r})
-state_q_r.AssignTransitions({"t":state_m_r})
-state_r_r.AssignTransitions({"c":state_d_r})
+state_h_r.AssignTransitions({"b":state_l_r}) 
+state_j_r.AssignTransitions({"l":state_m_r}) 
+state_k_r.AssignTransitions({"v":state_n_r}) 
+state_l_r.AssignTransitions({"l":state_o_r}) 
+state_m_r.AssignTransitions({"e":state_d_r}) 
+state_n_r.AssignTransitions({"a":state_q_r}) 
+state_o_r.AssignTransitions({"i":state_r_r}) 
+state_q_r.AssignTransitions({"t":state_m_r}) 
+state_r_r.AssignTransitions({"c":state_d_r}) 
 states_2 = [state_empty_r, state_a_r, state_b_r, state_c_r, state_d_r, state_e_r, state_f_r, state_g_r, state_h_r, state_j_r, state_k_r, state_l_r, state_m_r, state_n_r, state_o_r, state_q_r, state_r_r]
 
 entry_2 = ["i", "f", "n", "t", "w", "h", "l", "e", "p", "r", "v", "a", "u", "b", "c"]
@@ -85,7 +85,7 @@ state_c_o = State("C", True)
 state_empty_o.AssignTransitions({"+":state_a_o, "-":state_a_o, "*":state_a_o, "/":state_a_o, "%":state_a_o, "=":state_c_o, "!":state_b_o, "<":state_c_o, ">":state_c_o, "^":state_a_o})
 state_a_o.AssignTransitions({})
 state_b_o.AssignTransitions({"=":state_a_o})
-state_c_o.AssignTransitions({"=":state_b_o})
+state_c_o.AssignTransitions({"=":state_a_o})
 
 states_3 = [state_empty_o, state_a_o, state_b_o, state_c_o]
 entry_3 = ["+", "-", "*", "/", "%", "=", "!", "<", ">", "^"]

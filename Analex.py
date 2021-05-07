@@ -1,5 +1,5 @@
 import Stuff
-#codigo = input()
+
 class Token:
 
     def __init__(self, value, name):
@@ -16,6 +16,7 @@ class TokenIdentifier:
         for i in range(len(states)):
             self.transitions = self.transitions + [[]]
         self.currentState = self.states[0]
+        self.MakeTransitionMatrix()
 
     def MakeTransitionMatrix(self):
         for i in range(len(self.states)):
@@ -24,7 +25,6 @@ class TokenIdentifier:
 
     def EvaluateRegularExpression(self, re):
         self.currentState = self.states[0]
-        self.MakeTransitionMatrix()
         for i in range(len(re)):
             if re[i] in self.entries and self.currentState is not None:
                 row = self.states.index(self.currentState)
@@ -123,9 +123,4 @@ class LexicalAnalizer:
         for i in self.tokenList:
             a = a + [i.value + ": " + i.name]
         return a
-
-                
-#codeAnalyzer = LexicalAnalizer(identifiers)
-#codeAnalyzer.AnalyzeCode(codigo)
-#codeAnalyzer.PrintTokensType()
     
