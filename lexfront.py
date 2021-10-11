@@ -1,5 +1,7 @@
 import PySimpleGUI as ui
 import Analex as al
+import Anasin as an
+from gramaticas import AP
 
 code_editor_column = [
     [
@@ -42,6 +44,9 @@ while True:
         code = values["_CODE"]
         la = al.LexicalAnalizer()
         tokens = la.AnalyzeCode(code)
-        lexems = la.GetTokensValue()
+        accept = an.ExecuteAnalizer(tokens)
+        print
+        lexems = la.GetTokensValue() + ["accept"] if accept else la.GetTokensValue() + ["error"]
         window["_LIST"].update(values=lexems)
+        
 window.close()
