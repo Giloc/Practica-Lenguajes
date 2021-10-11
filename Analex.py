@@ -123,4 +123,10 @@ class LexicalAnalizer:
         for i in self.tokenList:
             a = a + [i.value + ": " + i.name]
         return a
+
+    def GetTokensName(self):
+        b = []
+        for i in self.tokenList:
+            b = b + [i.name]
+        return b
     
